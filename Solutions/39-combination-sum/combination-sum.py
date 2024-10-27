@@ -1,42 +1,27 @@
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        # Main function that takes a list of candidates and a target sum
+    def findCombinations(self, index: int, target: int, candidates: List[int], current: List[int], result: List[List[int]]) -> None:
+        # Base case: if target becomes 0, we found a valid combination
+        if target == 0:
+            result.append(current[:])  # Add a copy of current combination to result
+            return
         
-        def backtrack(start, path, target):
-            # Helper function for backtracking
-            # start: starting index to consider candidates
-            # path: current combination being built
-            # target: remaining sum to achieve
-            
-            # Base case: if target becomes 0, we found a valid combination
-            if target == 0:
-                # Make a copy of current path and add to results
-                fResult.append(path[:])
-                return
-            
-            # Try each candidate starting from 'start' index
-            for i in range(start, len(candidates)):
-                candidate = candidates[i]
+        # Try all possible numbers from current index
+        for i in range(index, len(candidates)):
+            # Only proceed if current number doesn't exceed target
+            if candidates[i] <= target:
+                # Include current number in combination
+                current.append(candidates[i])
                 
-                # Only proceed if current candidate doesn't exceed remaining target
-                if candidate <= target:
-                    # Include current candidate in path
-                    path.append(candidate)
-                    
-                    # Recursively try to find combinations
-                    # We pass 'i' (not i+1) to allow reusing same number
-                    backtrack(i, path, target - candidate)
-                    
-                    # Backtrack by removing the last added candidate
-                    path.pop()
-        
-        # Initialize result list to store all valid combinations
-        fResult = []
-        
-        # Sort candidates for optimization (optional but helpful)
-        candidates.sort()
-        
-        # Start backtracking with empty path
-        backtrack(0, [], target)
-        
-        return fResult
+                # Recursive call with:
+                # - same index i (allowing reuse of same number)
+                # - reduced target by current number
+                self.findCombinations(i, target - candidates[i], candidates, current, result)
+                
+                # Backtrack: remove the last added number to try other combinations
+                current.pop()
+    
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        result = []        # Stores all valid combinations
+        current = []       # Temporary list to build combinations
+        self.findCombinations(0, target, candidates, current, result)
+        return result
