@@ -1,26 +1,26 @@
-package main
-
-var current = make([]byte, 16)
+var combinations []string
+var number int
 
 func generateParenthesis(n int) []string {
-	ans := make([]string, 0)
-	rec22(&ans, n, 0, 0)
-	return ans
+	combinations = []string{}
+	number = n
+
+	backtrack("", 0, 0)
+
+	return combinations
 }
 
-func rec22(ans *[]string, n int, left int, right int) {
-	if left+right == n*2 {
-		*ans = append(*ans, string(current[:n*2]))
+func backtrack(current string, open, close int) {
+	if len(current) == number*2 {
+		combinations = append(combinations, current)
 		return
 	}
 
-	if left < n {
-		current[left+right] = '('
-		rec22(ans, n, left+1, right)
+	if open < number {
+		backtrack(current+"(", open+1, close)
 	}
 
-	if right < left {
-		current[left+right] = ')'
-		rec22(ans, n, left, right+1)
+	if close < open {
+		backtrack(current+")", open, close+1)
 	}
 }
