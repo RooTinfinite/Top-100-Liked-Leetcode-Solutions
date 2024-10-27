@@ -1,20 +1,21 @@
 def generate_parenthesis(n)
-    @result = []
-    solve("", 0, 0, n)
-    @result
+  ans = []
+  dfs(n, n, "", ans)
+  ans
 end
 
-def solve(s, open, close, n)
-    if close == n && open == n
-        @result.push(s)
-        return
-    end
-    
-    if open < n
-        solve(s + "(", open + 1, close, n)
-    end
-    
-    if close < open
-        solve(s + ")", open, close + 1, n)
-    end
+
+def dfs(left_remain, right_remain, str, ans)
+  if left_remain == 0 and right_remain == 0
+    ans << str
+    return
+  end
+
+  if left_remain > 0
+    dfs(left_remain - 1,   right_remain, str + "(", ans)
+  end
+
+  if left_remain < right_remain
+    dfs(left_remain, right_remain - 1, str + ")", ans)
+  end
 end
