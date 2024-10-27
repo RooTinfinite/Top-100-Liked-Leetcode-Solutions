@@ -1,47 +1,43 @@
 class Solution {
-    // Map to store digit-to-letters mapping
-    private Map<Character, String> phoneMap = Map.of(
-        '2', "abc",
-        '3', "def",
-        '4', "ghi",
-        '5', "jkl",
-        '6', "mno",
-        '7', "pqrs",
-        '8', "tuv",
-        '9', "wxyz"
-    );
+    private Map<Character, String> phoneMap;
+    private List<String> output;
     
-    // List to store all combinations
-    private List<String> output = new ArrayList<>();
+    public List<String> letterCombinations(String digits) {
+        // Initialize output list and return empty list if input is empty
+        output = new ArrayList<>();
+        if (digits.length() == 0) {
+            return output;
+        }
+        
+        // Initialize phone mapping
+        phoneMap = new HashMap<>();
+        phoneMap.put('2', "abc");
+        phoneMap.put('3', "def");
+        phoneMap.put('4', "ghi");
+        phoneMap.put('5', "jkl");
+        phoneMap.put('6', "mno");
+        phoneMap.put('7', "pqrs");
+        phoneMap.put('8', "tuv");
+        phoneMap.put('9', "wxyz");
+        
+        // Start backtracking
+        backtrack("", digits);
+        return output;
+    }
     
     private void backtrack(String combination, String nextDigits) {
-        // Base case: if no more digits to process
+        // Base case: if no more digits to check
         if (nextDigits.length() == 0) {
             output.add(combination);
         } else {
-            // Get letters for current digit
+            // Get the first digit and its corresponding letters
             String letters = phoneMap.get(nextDigits.charAt(0));
             
-            // Try each letter for current digit
+            // For each letter corresponding to current digit
             for (char letter : letters.toCharArray()) {
-                // Recursively process remaining digits
+                // Add current letter to combination and process remaining digits
                 backtrack(combination + letter, nextDigits.substring(1));
             }
         }
-    }
-    
-    public List<String> letterCombinations(String digits) {
-        // Handle empty input
-        if (digits.length() == 0) {
-            return new ArrayList<>();
-        }
-        
-        // Clear output for fresh calculation
-        output.clear();
-        
-        // Start backtracking process
-        backtrack("", digits);
-        
-        return output;
     }
 }
