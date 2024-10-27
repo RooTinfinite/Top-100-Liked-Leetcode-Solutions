@@ -1,21 +1,17 @@
 function generateParenthesis(n: number): string[] {
-    const ans: string[] = [];
-    
-    function solve(s: string, open: number, close: number): void {
-        if (close === n && open === n) {
-            ans.push(s);
+    const result = [];
+
+    const generateSeq = (open: number, close: number, prefix: string) => {
+        if(open > n || close > n || close > open) return;
+        if(open === n && close === n){
+            result.push(prefix);
             return;
         }
-        
-        if (open < n) {
-            solve(s + "(", open + 1, close);
-        }
-        
-        if (close < open) {
-            solve(s + ")", open, close + 1);
-        }
+        generateSeq(open+1, close, prefix+'(');
+        generateSeq(open, close+1, prefix+')');
     }
-    
-    solve("", 0, 0);
-    return ans;
-}
+
+    generateSeq(0,0,'')
+
+    return result;
+};
