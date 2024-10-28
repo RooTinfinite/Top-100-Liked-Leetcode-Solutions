@@ -1,19 +1,21 @@
 function permute(nums: number[]): number[][] {
-    const result: number[][] = [];
+  const permuations: number[][] = [];
+  const chunks: number[] = [];
 
-    // Helper function to perform backtracking
-    function backtrack(path: number[], remaining: number[]) {
-        if (remaining.length === 0) {
-            result.push([...path]); // If no remaining numbers, add the current path to result
-        } else {
-            for (let i = 0; i < remaining.length; i++) {
-                path.push(remaining[i]); // Choose the next number
-                backtrack(path, remaining.slice(0, i).concat(remaining.slice(i + 1))); // Explore with the chosen number
-                path.pop(); // Un-choose the number to backtrack
-            }
-        }
+  function backtrack(flags: number) {
+    if (chunks.length === nums.length) {
+      permuations.push([...chunks]);
+      return;
     }
 
-    backtrack([], nums); // Initialize backtracking with an empty path
-    return result;
+    for (let i = 0; i < nums.length; i++) {
+      if ((flags >> i) & 1) continue;
+      chunks.push(nums[i]);
+      backtrack(flags | (1 << i));
+      chunks.pop();
+    }
+  }
+
+  backtrack(0);
+  return permuations;
 }
